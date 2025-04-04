@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notícias Sustentáveis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        function validarFormulario(event) {
+            event.preventDefault();
+            let nome = document.querySelector('#contato input[type="text"]').value.trim();
+            let email = document.querySelector('#contato input[type="email"]').value.trim();
+            let mensagem = document.querySelector('#contato textarea').value.trim();
+            
+            if (nome === "" || email === "" || mensagem === "") {
+                alert("Por favor, preencha todos os campos corretamente.");
+                return false;
+            }
+            
+            if (!email.includes("@") || !email.includes(".")) {
+                alert("Por favor, insira um email válido.");
+                return false;
+            }
+            
+            alert("Mensagem enviada com sucesso!");
+            document.querySelector('#contato form').reset();
+            return true;
+        }
+
+        function validarDenuncia(event) {
+            event.preventDefault();
+            let descricao = document.querySelector('#denuncias textarea').value.trim();
+            let fotoInput = document.querySelector('#denuncias input[type="file"]');
+            let fotoPreview = document.getElementById('foto-preview');
+            
+            if (descricao === "") {
+                alert("Por favor, descreva o problema.");
+                return false;
+            }
+            
+            if (fotoInput.files.length > 0) {
+                let file = fotoInput.files[0];
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    fotoPreview.src = e.target.result;
+                    fotoPreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            alert("Denúncia enviada com sucesso!");
+            document.querySelector('#denuncias form').reset();
+            fotoPreview.style.display = 'none';
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Notícias Sustentáveis</h1>
+    </header>
+    <nav>
+        <a href="#noticias">Notícias</a>
+        <a href="#denuncias">Denúncias</a>
+        <a href="#sugestoes">Sugestões</a>
+        <a href="#contato">Contato</a>
+        <a href="#sobre">Sobre o Projeto</a>
+    </nav>
+    <div class="container" id="noticias">
+        <h2>Últimas Notícias</h2>
+        <div class="noticias-grid">
+            <div class="noticia-card">
+                <img src="noticia1.jpg" alt="Imagem notícia 1">
+                <h3>Redução de Plástico nos Mercados</h3>
+                <p>Grandes redes de supermercados adotam embalagens biodegradáveis.</p>
+            </div>
+            <div class="noticia-card">
+                <img src="noticia2.jpg" alt="Imagem notícia 2">
+                <h3>Nova Área Verde na Cidade</h3>
+                <p>Uma nova praça ecológica será inaugurada no centro da cidade.</p>
+            </div>
+            <div class="noticia-card">
+                <img src="noticia3.jpg" alt="Imagem notícia 3">
+                <h3>Reciclagem Aumenta 30%</h3>
+                <p>Taxa de reciclagem na cidade cresce após novas políticas públicas.</p>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="denuncias">
+        <h2>Denuncie um problema ambiental</h2>
+        <form class="formulario" onsubmit="return validarDenuncia(event)">
+            <label>Descrição:</label>
+            <textarea rows="4" placeholder="Explique o problema..." required></textarea>
+            <label>Endereço da Ocorrência:</label>
+            <input type="text" placeholder="Digite o endereço da ocorrência" required>
+            <label>Foto (opcional):</label>
+            <input type="file" accept="image/*">
+            <img id="foto-preview" src="#" alt="Prévia da Imagem" style="display:none; width:100%; max-width:300px; margin-top:10px; border-radius:5px;">
+            <button type="submit">Enviar Denúncia</button>
+        </form>
+    </div>
+    <div class="container" id="sugestoes">
+        <h2>Envie sua sugestão</h2>
+        <p>Nos ajude a melhorar a preservação do bairro enviando suas sugestões.</p>
+        <form class="formulario">
+            <label>Nome:</label>
+            <input type="text" placeholder="Seu nome" required>
+            <label>Endereço da Sugestão:</label>
+            <input type="text" placeholder="Digite o endereço do local da sua sugestão" required>
+            <label>Sugestão:</label>
+            <textarea rows="4" placeholder="Digite sua sugestão..." required></textarea>
+            <button type="submit">Enviar Sugestão</button>
+        </form>
+    </div>    
+    <div class="container" id="contato">
+        <h2>Fale Conosco</h2>
+        <form class="formulario" onsubmit="return validarFormulario(event)">
+            <label>Nome:</label>
+            <input type="text" placeholder="Seu nome" required>
+            <label>Email:</label>
+            <input type="email" placeholder="Seu email" required>
+            <label>Mensagem:</label>
+            <textarea rows="4" placeholder="Digite sua mensagem..." required></textarea>
+            <button type="submit">Enviar Mensagem</button>
+        </form>
+    </div>
+    <section id="sobre">
+        <h2>Sobre o Projeto</h2>
+        <p>Nosso projeto tem como objetivo informar e engajar a comunidade com conteúdos relevantes e atualizados.</p>
+    </section>
+    <button id="btnTopo" onclick="voltarAoTopo()">▲ Topo</button>    
+    <footer>
+        <p>&copy; 2025 Notícias Sustentáveis - Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
