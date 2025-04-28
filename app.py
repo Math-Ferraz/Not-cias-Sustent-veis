@@ -16,6 +16,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'si
 # Configuração do banco de dados SQLite
 db = SQLAlchemy(app)
 
+#Para criar tabela no render
+@app.before_first_request
+def create_tables():
+    db.create_all
+
 # Diretório de uploads
 UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
