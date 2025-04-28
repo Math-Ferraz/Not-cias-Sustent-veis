@@ -11,7 +11,7 @@ app.config['SECRET_KEY'] = 'secret_projeto' # **Defina uma chave secreta forte!*
 
 #salvar o banco de dados na mesma pasta
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'site.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join('/tmp', 'site.db')
 
 # Configuração do banco de dados SQLite
 db = SQLAlchemy(app)
