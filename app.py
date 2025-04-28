@@ -17,7 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join('/tmp', 'sit
 db = SQLAlchemy(app)
 
 #Para criar tabela no render
-with app.app_context():
+def create_tables():
     db.create_all()
 
 # Diretório de uploads
