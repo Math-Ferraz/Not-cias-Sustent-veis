@@ -17,7 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join('/tmp', 'sit
 db = SQLAlchemy(app)
 
 #Para criar tabela no render
-def create_tables():
+with app.app_context():
     db.create_all()
 
 # Diretório de uploads
@@ -369,16 +369,13 @@ def admin():
 
 if __name__ == '__main__':
     # Cria as tabelas do banco de dados antes de rodar a aplicação
-    with app.app_context():
-        db.create_all()
-
         # **Exemplo de como criar um usuário administrador (FAÇA ISSO APENAS UMA VEZ!)**
         # Você pode remover ou comentar este bloco depois de criar o primeiro usuário.
-        #if User.query.filter_by(username='admin').first() is None:
-            #admin_user = User(username='admin')
-            #admin_user.set_password('projeto99admin') # **TROQUE 'sua_senha_admin' por uma senha forte!**
-            #db.session.add(admin_user)
-            #db.session.commit()
-            #print("🔐 Usuário 'admin' criado com sucesso!")
+        if User.query.filter_by(username='admin').first() is None:
+            admin_user = User(username='admin')
+            admin_user.set_password('projeto99admin') # **TROQUE 'sua_senha_admin' por uma senha forte!**
+            db.session.add(admin_user)
+            db.session.commit()
+            print("🔐 Usuário 'admin' criado com sucesso!")
 
-    app.run(debug=True)
+app.run(debug=True)
