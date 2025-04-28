@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: 'Poppins', sans-serif;
+        }
+        .admin-container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #2E7D32;
+            margin-top: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #e0e0e0;
+        }
+        img {
+            max-width: 100px;
+            border-radius: 4px;
+        }
+        .delete-link {
+            color: red;
+            text-decoration: none;
+            margin-right: 10px; /* Espaço entre Excluir e Marcar como Lido */
+        }
+         .delete-link:hover {
+            text-decoration: underline;
+        }
+        .read-link {
+            color: green; /* Cor para o link Marcar como Lido */
+            text-decoration: none;
+        }
+         .read-link:hover {
+            text-decoration: underline;
+        }
+        /* **Novo estilo para linhas lidas** */
+        .read {
+            background-color: #f0f0f0; /* Cor cinza clara para o fundo da linha */
+            color: #777; /* Cor do texto mais clara (opcional) */
+        }
+    </style>
+</head>
+<body>
+<div class="admin-container">
+    <h1>Painel Administrativo</h1>
+    <p><a href="{{ url_for('logout') }}">Sair (Logout)</a></p>
+    <h2>Denúncias</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Endereço</th>
+                <th>Imagem</th>
+                <th>Data</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in denuncias %}
+            {# **CORRIGIDO: Adicionado classe 'read' se o item estiver marcado como lido** #}
+            <tr {% if d.is_read %}class="read"{% endif %}>
+                <td>{{ d.descricao }}</td>
+                <td>{{ d.endereco }}</td>
+                <td>{% if d.foto_url %}<img src="/{{ d.foto_url }}">{% endif %}</td>
+                <td>{{ d.data_envio.strftime('%d/%m/%Y %H:%M') }}</td>
+                <td>
+                    <a href="{{ url_for('delete_denuncia', id=d.id) }}" class="delete-link" onclick="return confirm('Tem certeza que deseja excluir esta denúncia?');">Excluir</a>
+                    {% if not d.is_read %}
+                    <a href="{{ url_for('mark_read_denuncia', id=d.id) }}" class="read-link">Marcar como Lido</a>
+                    {% else %}
+                    Lido
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Sugestões</h2>
+    <table>
+        <tr>
+            <th>Nome</th>
+            <th>Endereço</th>
+            <th>Sugestão</th>
+            <th>Data</th>
+            <th>Ações</th>
+        </tr>
+        {% for s in sugestoes %}
+        {# **Adiciona classe 'read' se o item estiver marcado como lido** #}
+            <tr {% if s.is_read %}class="read"{% endif %}>
+            <td>{{ s.nome or 'Anônimo' }}</td>
+            <td>{{ s.endereco or '-' }}</td>
+            <td>{{ s.sugestao }}</td>
+            <td>{{ s.data_envio.strftime('%d/%m/%Y %H:%M') }}</td>
+            <td>
+                {# Link para a rota de exclusão de sugestão, passando o ID #}
+               <a href="{{ url_for('delete_sugestao', id=s.id) }}" class="delete-link" onclick="return confirm('Tem certeza que deseja excluir esta sugestão?');">Excluir</a>
+               {# **Adiciona link "Marcar como Lido" apenas se não estiver lido** #}
+                     {% if not s.is_read %}
+                        <a href="{{ url_for('mark_read_sugestao', id=s.id) }}" class="read-link">Marcar como Lido</a>
+                    {% else %}
+                        Lido
+                    {% endif %}
+           </td>
+       </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Mensagens de Contato</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Mensagem</th>
+                <th>Data</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in mensagens %}
+            {# **CORRIGIDO: Removido tr extra e adicionado classe 'read' se o item estiver marcado como lido** #}
+            <tr {% if m.is_read %}class="read"{% endif %}>
+                <td>{{ m.nome }}</td>
+                <td>{{ m.email }}</td>
+                <td>{{ m.mensagem }}</td>
+                <td>{{ m.data_envio.strftime('%d/%m/%Y %H:%M') }}</td>
+                <td>
+                    <a href="{{ url_for('delete_contato', id=m.id) }}" class="delete-link" onclick="return confirm('Tem certeza que deseja excluir esta mensagem?');">Excluir</a>
+                    {% if not m.is_read %}
+                    <a href="{{ url_for('mark_read_contato', id=m.id) }}" class="read-link">Marcar como Lido</a>
+                    {% else %}
+                    Lido
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

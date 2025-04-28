@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel de Notícias - Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.tiny.cloud/1/oedvy1f4koq9lb5a91p648xc4bcr8fi52fkxt0kt23fa6rwv/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+          selector: 'textarea#conteudo',
+          menubar: false,
+          plugins: 'link lists',
+          toolbar: 'undo redo | bold italic | bullist numlist | link',
+          branding: false,
+          api_key: 'oedvy1f4koq9lb5a91p648xc4bcr8fi52fkxt0kt23fa6rwv',
+          language: 'pt_BR',  // opcional
+          link_target_list: [
+            { title: 'Nova aba', value: '_blank' }
+        ],
+          setup: function (editor) {
+            editor.on('change', function () {
+              editor.save(); // Salva o conteúdo formatado corretamente no <textarea>
+            });
+          }
+        });
+      </script>
+      
+</head>
+<body>
+    <header>
+        <h1>Gerenciar Notícias</h1>
+        <a href="/admin">Voltar para Admin</a>
+    </header>
+
+    <section class="container">
+        <h2>Nova Notícia</h2>
+        {% if erro %}<p style="color: red">{{ erro }}</p>{% endif %}
+        <form method="post" enctype="multipart/form-data" class="formulario">
+            <label>Título:</label>
+            <input type="text" name="titulo" required>
+
+            <label>Conteúdo:</label>
+            <textarea name="conteudo" id="conteudo" rows="5"></textarea>
+
+            <label>Imagem (opcional):</label>
+            <input type="file" name="imagem" accept="image/*">
+
+            <button type="submit">Publicar Notícia</button>
+        </form>
+    </section>
+
+    <section class="container">
+        <h2>Notícias Publicadas</h2>
+        {% for noticia in noticias %}
+            <div class="noticia-card">
+                <h3>{{ noticia.titulo }}</h3>
+                <p><small>Publicado em {{ noticia.data_publicacao.strftime('%d/%m/%Y %H:%M') }}</small></p>
+                <p>{{ noticia.conteudo | safe }}</p>
+                {% if noticia.imagem_url %}
+                    <img src="/{{ noticia.imagem_url }}" alt="Imagem da Notícia" style="max-width: 300px; border-radius: 6px;">
+                {% endif %}
+                <form method="post" action="/admin/noticia/{{ noticia.id }}/excluir">
+                    <button type="submit" style="background-color: red">Excluir</button>
+                </form>
+                <hr>
+            </div>
+        {% else %}
+            <p>Nenhuma notícia publicada ainda.</p>
+        {% endfor %}
+    </section>
+</body>
+</html>

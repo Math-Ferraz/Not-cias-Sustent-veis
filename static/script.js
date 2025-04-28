@@ -21,8 +21,24 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Formulário de contato
+    // Formulário de contato com validação personalizada
     document.querySelector("#contato form").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const nome = this.querySelector('input[name="nome"]').value.trim();
+        const email = this.querySelector('input[name="email"]').value.trim();
+        const mensagem = this.querySelector('textarea[name="mensagem"]').value.trim();
+
+        if (!nome || !email || !mensagem) {
+            alert("Por favor, preencha todos os campos.");
+            return;
+        }
+
+        if (!email.includes("@") || !email.includes(".")) {
+            alert("Por favor, insira um email válido.");
+            return;
+        }
+
         enviarFormulario(event, "/enviar-contato", this);
     });
 

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Notícias Sustentáveis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> {# Inclui seu CSS #}
+    <style>
+        /* Estilos básicos para o formulário de login */
+        .login-container {
+            max-width: 400px;
+            margin: 80px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .login-container h2 {
+            color: #2E7D32;
+            margin-bottom: 20px;
+        }
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: calc(100% - 22px); /* Ajusta largura considerando padding e border */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .login-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #2E7D32;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .login-form button:hover {
+            background-color: #1B5E20;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login Administrativo</h2>
+        <form class="login-form" method="POST"> {# O método POST enviará os dados para a rota /login #}
+            <input type="text" name="username" placeholder="Nome de Usuário" required> {# name="username" corresponde ao que o Flask busca #}
+            <input type="password" name="password" placeholder="Senha" required> {# name="password" corresponde ao que o Flask busca #}
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
+</body>
+</html>
