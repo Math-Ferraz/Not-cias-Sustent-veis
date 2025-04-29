@@ -16,20 +16,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join('/tmp', 'sit
 # Configuração do banco de dados SQLite
 db = SQLAlchemy(app)
 
-# Garantir que as tabelas sejam criadas no ambiente do Render
-@app.before_first_request
-def create_tables():
-    db.create_all()
-
-
-#Para criar tabela no render
-with app.app_context():
-    try:
-        db.create_all()
-        print("✔️ Banco de dados inicializado com sucesso.")
-    except Exception as e:
-        print(f"❌ Erro ao inicializar banco de dados: {e}")
-
 # Diretório de uploads
 UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -376,3 +362,11 @@ def admin():
     mensagens = MensagemContato.query.order_by(MensagemContato.data_envio.desc()).all()
     sugestoes = Sugestao.query.order_by(Sugestao.data_envio.desc()).all()
     return render_template('admin.html', denuncias=denuncias, mensagens=mensagens, sugestoes=sugestoes)
+
+# Inicialização do banco (Render)
+with app.app_context():
+    try:
+        db.create_all()
+        print("\u2714\ufe0f Banco de dados inicializado com sucesso.")
+    except Exception as e:
+        print(f"\u274c Erro ao inicializar banco de dados: {e}")
