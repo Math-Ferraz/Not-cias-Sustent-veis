@@ -24,7 +24,11 @@ def create_tables():
 
 #Para criar tabela no render
 with app.app_context():
-    db.create_all()
+    try:
+        db.create_all()
+        print("✔️ Banco de dados inicializado com sucesso.")
+    except Exception as e:
+        print(f"❌ Erro ao inicializar banco de dados: {e}")
 
 # Diretório de uploads
 UPLOAD_FOLDER = 'static/uploads'
