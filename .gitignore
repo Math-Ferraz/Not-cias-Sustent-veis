@@ -18,4 +18,3 @@ venv/
 # Se quiser incluir imagens específicas que são parte do código (como a do header), não ignore a pasta static/uploads inteira,
 # ou ignore tudo e depois use 'git add -f' para forçar a adição de arquivos específicos.
 # Para a maioria dos casos, é bom ignorar uploads de usuários:
-static/uploads/

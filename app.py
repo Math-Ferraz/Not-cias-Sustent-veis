@@ -363,10 +363,17 @@ def admin():
     sugestoes = Sugestao.query.order_by(Sugestao.data_envio.desc()).all()
     return render_template('admin.html', denuncias=denuncias, mensagens=mensagens, sugestoes=sugestoes)
 
-# Inicialização do banco (Render)
 with app.app_context():
     try:
         db.create_all()
-        print("\u2714\ufe0f Banco de dados inicializado com sucesso.")
+        print("✔️ Banco de dados inicializado com sucesso.")
+
+        # Criação automática de usuário admin, se não existir
+        if User.query.filter_by(username='admin').first() is None:
+            admin_user = User(username='admin')
+            admin_user.set_password('projeto99admin')  # Defina a senha desejada
+            db.session.add(admin_user)
+            db.session.commit()
+            print("🔐 Usuário admin criado com sucesso.")
     except Exception as e:
-        print(f"\u274c Erro ao inicializar banco de dados: {e}")
+        print(f"❌ Erro ao inicializar banco de dados: {e}")
